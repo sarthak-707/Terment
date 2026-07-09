@@ -1,0 +1,16 @@
+[project]
+name = "terment"
+version = "0.1.0"
+description = "simple terminal agent"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dotenv>=0.9.9",
+    "openai>=2.44.0",
+    "rich>=15.0.0",
+]
+[project.scripts]
+terment = "main:main"
+
+[tool.uv]
+package = true
