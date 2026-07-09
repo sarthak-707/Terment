@@ -17,4 +17,4 @@ A simple terminal chatbot built with Python, OpenAI-compatible API, Rich, and uv
 ...
 
 ## Screenshot
-[[terminal_example.png]]
+![Terminal Example](terminal_example.png)
