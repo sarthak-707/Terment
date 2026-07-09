@@ -46,7 +46,7 @@ class Chatbot:
         self.messages.append({"role": "assistant", "content": final_response})
 
     def _render_message(self, streamed_response: Generator) -> None:
-        panel = Panel(renderable="", border_style="blue", title="Bot🤖")
+        panel = Panel(renderable="", border_style="blue", title="Terment🤖")
         with Live(panel, refresh_per_second=3, console=console) as live:
             for chunk in streamed_response:
                 panel.renderable = Markdown(chunk)
