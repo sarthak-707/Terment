@@ -10,12 +10,12 @@ from rich.live import Live
 from collections.abc import Generator
 from pathlib import Path
 
-from terment.providers import Provider, gemini, openrouter, groq, openai
+from terment.providers import Provider, gemini, openrouter, groq, openai, nvidia
 
 load_dotenv()
 console = Console()
 
-list_of_providers = [openai, gemini, groq, openrouter]
+list_of_providers = [openai, gemini, groq, openrouter, nvidia]
 
 
 class Chatbot:
@@ -46,10 +46,18 @@ class Chatbot:
         self.messages.append({"role": "assistant", "content": final_response})
 
     def _render_message(self, streamed_response: Generator) -> None:
-        panel = Panel(renderable="", border_style="blue", title="Terment🤖")
+        panel = Panel(
+            renderable="",
+            border_style="#ea76cb",
+            title="Terment🤖",
+            subtitle=self.model,
+            padding=2,
+        )
         with Live(panel, refresh_per_second=3, console=console) as live:
             for chunk in streamed_response:
-                panel.renderable = Markdown(chunk)
+                panel.renderable = Markdown(
+                    chunk, style="#f9e2af", code_theme="catppuccin-mocha"
+                )
                 live.refresh()
 
     def _save_chat(self):
@@ -76,9 +84,9 @@ class Chatbot:
 
 
 terment = Chatbot(
-    model="gemini-3.5-flash",
+    model="gemini-3.1-flash-lite",
     provider=gemini,
-    system_prompt="You are a helpful agent with a humuorous tone.",
+    system_prompt="You are a helpful agent which uses dry humour with a cozy tone .",
 )
 
 
