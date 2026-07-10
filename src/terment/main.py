@@ -34,7 +34,10 @@ class Chatbot:
     def _generate_response(self, prompt: str):
         self.messages.append({"role": "user", "content": prompt})
         stream = self.client.chat.completions.create(
-            messages=self.messages, model=self.model, stream=True
+            messages=self.messages,
+            model=self.model,
+            stream=True,
+            reasoning_effort="none",
         )
         final_response_list = []
         for chunks in stream:
