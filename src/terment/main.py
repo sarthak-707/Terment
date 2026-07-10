@@ -11,27 +11,11 @@ from rich.live import Live
 from collections.abc import Generator
 from pathlib import Path
 
-from terment.providers import (
-    Provider,
-    gemini,
-    openrouter,
-    groq,
-    openai,
-    nvidia,
-    llama_cpp,
-)
+from terment.config_manager import get_selected_provider
+from terment.providers import Provider
 
 load_dotenv()
 console = Console()
-
-list_of_providers: list[Provider] = [
-    openai,
-    gemini,
-    groq,
-    openrouter,
-    nvidia,
-    llama_cpp,
-]
 
 
 class Chatbot:
@@ -100,11 +84,16 @@ class Chatbot:
             self._render_message(ai_response)
 
 
-terment = Chatbot(
-    model="LFM2.5-350M-Q4_K_M.gguf",
-    provider=llama_cpp,
-    system_prompt="You are a helpful agent which uses dry humour with a cozy tone .",
-)
+selected_provider_dict = get_selected_provider()
+selected_model = selected_provider_dict.get("model", None)
+selected_provider = selected_provider_dict.get("provider", None)
+
+if selected_provider is not None and selected_model is not None:
+    terment = Chatbot(
+        model=selected_model,
+        provider=selected_provider,
+        system_prompt="You are a helpful agent which uses dry humour with a cozy tone .",
+    )
 
 
 def main():
