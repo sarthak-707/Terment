@@ -10,7 +10,7 @@ dependencies = [
     "rich>=15.0.0",
 ]
 [project.scripts]
-terment = "main:main"
+terment = "terment.main:main"
 
 [tool.uv]
 package = true
