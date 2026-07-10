@@ -13,7 +13,7 @@ from rich.live import Live
 from collections.abc import Generator
 from pathlib import Path
 
-from terment.providers import Provider, gemini, openrouter
+from terment.providers import Provider, gemini, openrouter, groq, openai
 
 load_dotenv()
 console = Console()
