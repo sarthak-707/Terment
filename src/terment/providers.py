@@ -27,3 +27,8 @@ gemini = Provider(
 groq = Provider(
     base_url="https://api.groq.com/openai/v1", api_key=os.getenv("GROQ_API_KEY", "")
 )
+
+nvidia = Provider(
+    base_url="https://integrate.api.nvidia.com/v1",
+    api_key=os.getenv("NVIDIA_API_KEY", ""),
+)
