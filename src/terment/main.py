@@ -13,20 +13,18 @@ from rich.live import Live
 from collections.abc import Generator
 from pathlib import Path
 
+from terment.providers import Provider, gemini, openrouter
+
 load_dotenv()
 console = Console()
-
-
-@dataclass
-class Provider:
-    api_key: str
-    base_url: str
 
 
 class Chatbot:
     def __init__(
         self, model: str, provider: Provider, system_prompt: str | None
     ) -> None:
+        if provider.api_key == "":
+            raise ValueError("Api Key not found for the selected provider.")
         self.messages: list[ChatCompletionMessageParam] = []
         self.client = OpenAI(api_key=provider.api_key, base_url=provider.base_url)
         self.model = model
@@ -73,13 +71,9 @@ class Chatbot:
             self._render_message(ai_response)
 
 
-openrouter = Provider(
-    base_url="https://openrouter.ai/api/v1", api_key=os.getenv("OPENROUTER_API_KEY", "")
-)
-
 terment = Chatbot(
-    model="cohere/north-mini-code:free",
-    provider=openrouter,
+    model="gemini-3.5-flash",
+    provider=gemini,
     system_prompt="You are a helpful agent with a humuorous tone.",
 )
 
