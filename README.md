@@ -1,6 +1,6 @@
 # Terment
 
-A simple terminal chatbot built with Python, OpenAI-compatible API, Rich, and uv.
+A simple terminal chatbot built with Python, OpenAI-compatible API, Rich, and uv. Uses Catppuccin mocha theme.
 
 ## Features
 
