@@ -11,3 +11,4 @@ wheels/
 .env
 # Chat History
 sessions
+project_spec.md
