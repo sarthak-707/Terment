@@ -15,6 +15,8 @@ from terment.providers import Provider, gemini, openrouter, groq, openai
 load_dotenv()
 console = Console()
 
+list_of_providers = [openai, gemini, groq, openrouter]
+
 
 class Chatbot:
     def __init__(
