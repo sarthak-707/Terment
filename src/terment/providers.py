@@ -13,9 +13,9 @@ openrouter = Provider(
     base_url="https://openrouter.ai/api/v1", api_key=os.getenv("OPENROUTER_API_KEY", "")
 )
 
-# openai = Provider(
-#     base_url="https://api.openai.com/v1", api_key=os.getenv("OPENAI_API_KEY", "")
-# )
+openai = Provider(
+    base_url="https://api.openai.com/v1", api_key=os.getenv("OPENAI_API_KEY", "")
+)
 
 gemini = Provider(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
