@@ -8,6 +8,7 @@ dependencies = [
     "dotenv>=0.9.9",
     "openai>=2.44.0",
     "rich>=15.0.0",
+    "ruff>=0.15.21",
 ]
 [project.scripts]
 terment = "terment.main:main"
