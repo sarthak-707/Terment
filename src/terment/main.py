@@ -1,7 +1,5 @@
 import time
-import os
 import json
-from dataclasses import dataclass
 from openai import OpenAI
 from openai.types.chat import ChatCompletionMessageParam
 from dotenv import load_dotenv
@@ -54,7 +52,7 @@ class Chatbot:
                 live.refresh()
 
     def _save_chat(self):
-        file_name = Path("sessions") / f"{time.strftime("%y%b%d%H%M%S")}"
+        file_name = Path("sessions") / f"{time.strftime('%y%b%d%H%M%S')}"
         with open(
             f"{file_name}.json", "w", encoding="utf-8"
         ) as conversation_history_file:
