@@ -1,6 +1,7 @@
 import time
 import json
 from openai import OpenAI
+from openai import APIConnectionError
 from openai.types.chat import ChatCompletionMessageParam
 from dotenv import load_dotenv
 from rich.console import Console
@@ -15,7 +16,7 @@ from terment.providers import Provider, gemini, openrouter, groq, openai, nvidia
 load_dotenv()
 console = Console()
 
-list_of_providers = [openai, gemini, groq, openrouter, nvidia]
+list_of_providers: list[Provider] = [openai, gemini, groq, openrouter, nvidia]
 
 
 class Chatbot:
@@ -62,12 +63,13 @@ class Chatbot:
 
     def _save_chat(self):
         file_name = Path("sessions") / f"{time.strftime('%y%b%d%H%M%S')}"
+        Path.touch(file_name)
         with open(
             f"{file_name}.json", "w", encoding="utf-8"
         ) as conversation_history_file:
             json.dump(self.messages, conversation_history_file, indent=4)
 
-    def chat(self) -> None:
+    def terminal_chat(self) -> None:
         while True:
             try:
                 prompt = input("You : ")
@@ -91,7 +93,10 @@ terment = Chatbot(
 
 
 def main():
-    terment.chat()
+    try:
+        terment.terminal_chat()
+    except APIConnectionError:
+        print("Failed to Connect with the servers")
 
 
 if __name__ == "__main__":
