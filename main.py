@@ -1,4 +1,6 @@
+import time
 import os
+import json
 from dataclasses import dataclass
 from openai import OpenAI
 from openai.types.chat import ChatCompletionMessageParam
@@ -9,6 +11,7 @@ from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.live import Live
 from collections.abc import Generator
+from pathlib import Path
 
 load_dotenv()
 console = Console()
@@ -52,11 +55,19 @@ class Chatbot:
                 panel.renderable = Markdown(chunk)
                 live.refresh()
 
+    def _save_chat(self):
+        file_name = Path("sessions") / f"{time.strftime("%y%b%d%H%M%S")}"
+        with open(
+            f"{file_name}.json", "w", encoding="utf-8"
+        ) as conversation_history_file:
+            json.dump(self.messages, conversation_history_file, indent=4)
+
     def chat(self) -> None:
         while True:
             prompt = input("You : ")
             if prompt.lower() in ["bye", "exit", "quit"]:
                 print("\nExiting !")
+                self._save_chat()
                 break
             ai_response = self._generate_response(prompt)
             self._render_message(ai_response)
@@ -75,3 +86,7 @@ terment = Chatbot(
 
 def main():
     terment.chat()
+
+
+if __name__ == "__main__":
+    main()
