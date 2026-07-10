@@ -11,12 +11,27 @@ from rich.live import Live
 from collections.abc import Generator
 from pathlib import Path
 
-from terment.providers import Provider, gemini, openrouter, groq, openai, nvidia
+from terment.providers import (
+    Provider,
+    gemini,
+    openrouter,
+    groq,
+    openai,
+    nvidia,
+    llama_cpp,
+)
 
 load_dotenv()
 console = Console()
 
-list_of_providers: list[Provider] = [openai, gemini, groq, openrouter, nvidia]
+list_of_providers: list[Provider] = [
+    openai,
+    gemini,
+    groq,
+    openrouter,
+    nvidia,
+    llama_cpp,
+]
 
 
 class Chatbot:
@@ -86,8 +101,8 @@ class Chatbot:
 
 
 terment = Chatbot(
-    model="gemini-3.1-flash-lite",
-    provider=gemini,
+    model="LFM2.5-350M-Q4_K_M.gguf",
+    provider=llama_cpp,
     system_prompt="You are a helpful agent which uses dry humour with a cozy tone .",
 )
 

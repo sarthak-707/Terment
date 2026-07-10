@@ -32,3 +32,5 @@ nvidia = Provider(
     base_url="https://integrate.api.nvidia.com/v1",
     api_key=os.getenv("NVIDIA_API_KEY", ""),
 )
+
+llama_cpp = Provider(base_url="http://localhost:8080/v1", api_key="Not-Needed")
