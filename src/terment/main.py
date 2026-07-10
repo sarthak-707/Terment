@@ -62,7 +62,12 @@ class Chatbot:
 
     def chat(self) -> None:
         while True:
-            prompt = input("You : ")
+            try:
+                prompt = input("You : ")
+            except KeyboardInterrupt:
+                print("\nExiting")
+                self._save_chat()
+                break
             if prompt.lower() in ["bye", "exit", "quit"]:
                 print("\nExiting !")
                 self._save_chat()
