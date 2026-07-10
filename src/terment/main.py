@@ -3,7 +3,6 @@ import json
 from openai import OpenAI
 from openai.types.chat import ChatCompletionMessageParam
 from dotenv import load_dotenv
-from rich import print as rprint
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
