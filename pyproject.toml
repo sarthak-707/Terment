@@ -14,7 +14,7 @@ dependencies = [
     "ruff>=0.15.21",
 ]
 [project.scripts]
-terment = "terment.main:main"
+terment = "terment.cli:main"
 
 [tool.uv]
 package = true
