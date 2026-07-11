@@ -1,11 +1,21 @@
 import yaml
-from terment.providers import Provider, provider_list
+from pathlib import Path
+from terment.providers import provider_list
+
+CONFIG_PATH = Path.home() / ".terment" / "config.yaml"
+CONFIG_PATH.parent.mkdir(exist_ok=True, parents=True)
+CONFIG_PATH.touch(exist_ok=True)
 
 
 def load_config():
-    with open("config.yaml", "r") as config:
+    with open(CONFIG_PATH, "r") as config:
         data = yaml.safe_load(config)
-    return data
+        if data is not None:
+            return data
+        else:
+            raise FileNotFoundError(
+                "Config was not found, create a valid config using config.yaml.example"
+            )
 
 
 def get_selected_provider():
