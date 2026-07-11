@@ -16,6 +16,9 @@ from terment.chatbot import Chatbot
 
 console = Console()
 
+sessions_storage_path = Path.home() / ".terment" / "sessions"
+sessions_storage_path.mkdir(parents=True, exist_ok=True)
+
 
 class CliChatbot(Chatbot):
     def _render_message(self, streamed_response: Generator) -> None:
@@ -34,11 +37,9 @@ class CliChatbot(Chatbot):
                 live.refresh()
 
     def _save_chat(self):
-        file_name = Path("sessions") / f"{strftime('%y%b%d%H%M%S')}"
+        file_name = sessions_storage_path / f"{strftime('%y%b%d%H%M%S')}.json"
         Path.touch(file_name)
-        with open(
-            f"{file_name}.json", "w", encoding="utf-8"
-        ) as conversation_history_file:
+        with open(file_name, "w", encoding="utf-8") as conversation_history_file:
             dump(self.messages, conversation_history_file, indent=4)
 
     def terminal_chat(self) -> None:
