@@ -1,6 +1,11 @@
+import subprocess
+import platform
 from time import strftime
 from json import dump
+from typing import Iterable
+from prompt_toolkit.document import Document
 from rich.panel import Panel
+from rich import print as rprint
 from rich.markdown import Markdown
 from collections.abc import Generator
 from rich.live import Live
@@ -8,8 +13,12 @@ from rich.console import Console
 from pathlib import Path
 from openai import APIConnectionError
 from prompt_toolkit import prompt
-from prompt_toolkit.completion import WordCompleter
-
+from prompt_toolkit.styles import Style
+from prompt_toolkit.completion import (
+    CompleteEvent,
+    Completer,
+    Completion,
+)
 
 from terment.config_manager import get_selected_provider
 from terment.chatbot import Chatbot
@@ -18,6 +27,39 @@ console = Console()
 
 SESSION_DIR = Path.home() / ".terment" / "sessions"
 SESSION_DIR.mkdir(parents=True, exist_ok=True)
+
+
+slash_commands = {
+    "/exit": "Quit and save the session",
+    "/clear": "Clear and start a new session",
+}
+
+prompt_style = Style.from_dict({"prompt": "bold #cba6f7"})
+
+
+class SlashCommandCompleter(Completer):
+    def __init__(self, slash_commands: dict) -> None:
+        self.slash_commands = slash_commands
+
+    def get_completions(
+        self, document: Document, complete_event: CompleteEvent
+    ) -> Iterable[Completion] | None:
+        text = document.text_before_cursor
+
+        if " " in text:
+            return
+
+        if not text.startswith("/"):
+            return
+
+        for cmd, description in self.slash_commands.items():
+            if cmd.startswith(text):
+                yield Completion(
+                    cmd, start_position=-len(text), display_meta=description
+                )
+
+
+prompt_comnpleter = SlashCommandCompleter(slash_commands=slash_commands)
 
 
 class CliChatbot(Chatbot):
@@ -43,19 +85,36 @@ class CliChatbot(Chatbot):
             dump(self.messages, conversation_history_file, indent=4)
 
     def terminal_chat(self) -> None:
+        self._initialise_context()
         while True:
             try:
-                prompt = input("You : ")
+                user_prompt = prompt(
+                    "You : ", completer=prompt_comnpleter, style=prompt_style
+                )
+                if user_prompt.startswith("/"):
+                    slash_command = user_prompt.split()[0]
+                    if slash_command == "/exit":
+                        rprint("[#f9e2af]\nExiting![/#f9e2af]")
+                        self._save_chat()
+                        print("Chat was saved.")
+                        break
+                    if slash_command == "/clear":
+                        subprocess.run(
+                            ["cls"] if platform.system == "Windows" else ["clear"]
+                        )
+                        self._save_chat()
+                        self.messages.clear()
+                        self._initialise_context()
+                        rprint("[#f9e2af]\nConversation Saved![/#f9e2af]")
+
+                else:
+                    ai_response = self._generate_response(user_prompt)
+                    self._render_message(ai_response)
+
             except KeyboardInterrupt:
                 print("\nExiting")
                 self._save_chat()
                 break
-            if prompt.lower() in ["bye", "exit", "quit"]:
-                print("\nExiting !")
-                self._save_chat()
-                break
-            ai_response = self._generate_response(prompt)
-            self._render_message(ai_response)
 
 
 selected_provider_dict = get_selected_provider()

@@ -17,6 +17,8 @@ class Chatbot:
         self.client = OpenAI(api_key=provider.api_key, base_url=provider.base_url)
         self.model = model
         self.system_prompt = system_prompt
+
+    def _initialise_context(self):
         if self.system_prompt is not None:
             self.messages.append({"role": "system", "content": self.system_prompt})
 
