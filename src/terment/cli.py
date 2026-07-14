@@ -59,7 +59,7 @@ class SlashCommandCompleter(Completer):
                 )
 
 
-prompt_comnpleter = SlashCommandCompleter(slash_commands=slash_commands)
+prompt_completer = SlashCommandCompleter(slash_commands=slash_commands)
 
 
 class CliChatbot(Chatbot):
@@ -89,7 +89,7 @@ class CliChatbot(Chatbot):
         while True:
             try:
                 user_prompt = prompt(
-                    "You : ", completer=prompt_comnpleter, style=prompt_style
+                    "You : ", completer=prompt_completer, style=prompt_style
                 )
                 if user_prompt.startswith("/"):
                     slash_command = user_prompt.split()[0]
