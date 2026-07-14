@@ -100,7 +100,7 @@ class CliChatbot(Chatbot):
                         break
                     if slash_command == "/clear":
                         subprocess.run(
-                            ["cls"] if platform.system == "Windows" else ["clear"]
+                            ["cls"] if platform.system() == "Windows" else ["clear"]
                         )
                         self._save_chat()
                         self.messages.clear()
