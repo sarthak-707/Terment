@@ -18,7 +18,7 @@ def load_config():
             )
 
 
-def get_selected_provider():
+def get_selected_provider() -> dict:
     config_data = load_config().get("model")
     selected_model = config_data.get("default")
     selected_provider = config_data.get("provider")
